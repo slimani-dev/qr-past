@@ -26,7 +26,6 @@ function submit () {
 }
 
 onMounted(() => {
-    console.log('channel : ', `pasts.${props.past.id}`)
     Echo.channel(`pasts.${props.past.id}`)
         .listen('.pasts.updated', (e) => {
             form.content = e.content
