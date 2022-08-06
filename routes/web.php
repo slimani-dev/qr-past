@@ -16,6 +16,9 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/', function () {
+   return redirect()->route('welcome');
+});
 Route::get('/', [PastController::class, 'index'])->name('welcome');
 Route::resource('/pasts', PastController::class);
 

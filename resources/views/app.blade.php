@@ -11,13 +11,7 @@
     <meta name="theme-color" content="#32138D">
     <link rel="manifest" href="{{ asset('build/manifest.webmanifest') }}">
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js', { scope: '/' })
-            })
-        }
-    </script>
+    <script src="{{ asset('build/registerSW.js') }}"></script>
 
 
     <!-- Fonts -->

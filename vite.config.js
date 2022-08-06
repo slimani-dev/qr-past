@@ -8,15 +8,12 @@ export default defineConfig({
     plugins: [
         VitePWA({
             registerType: 'autoUpdate',
-            injectRegister: 'inline',
-            outDir: 'public',
+            injectRegister: 'script',
             manifest: {
                 name: 'QR Past',
                 short_name: 'QR Past',
                 description: 'Scan QR and Past content',
                 theme_color: '#32138D',
-                scope: '/',
-                start_url: '/',
                 icons: [
                     {
                         src: '/icons/icon-192x192.png',
