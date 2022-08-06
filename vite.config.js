@@ -10,7 +10,6 @@ export default defineConfig({
             registerType: 'autoUpdate',
             injectRegister: 'auto',
             manifest: {
-                id: 'dev.witec.qr-past',
                 name: 'QR Past',
                 short_name: 'QR Past',
                 description: 'Scan QR and Past content',
