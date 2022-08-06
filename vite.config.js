@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite'
+import laravel from 'laravel-vite-plugin'
+import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
 
@@ -9,8 +9,8 @@ export default defineConfig({
         VitePWA({
             registerType: 'autoUpdate',
             injectRegister: 'auto',
-            outDir: 'public/',
             manifest: {
+                id: 'dev.witec.qr-past',
                 name: 'QR Past',
                 short_name: 'QR Past',
                 description: 'Scan QR and Past content',
@@ -36,15 +36,15 @@ export default defineConfig({
         }),
         laravel({
             input: 'resources/js/app.js',
-            refresh: true,
+            refresh: true
         }),
         vue({
             template: {
                 transformAssetUrls: {
                     base: null,
-                    includeAbsolute: false,
-                },
-            },
-        }),
-    ],
-});
+                    includeAbsolute: false
+                }
+            }
+        })
+    ]
+})
