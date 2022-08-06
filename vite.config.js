@@ -8,7 +8,7 @@ export default defineConfig({
     plugins: [
         VitePWA({
             registerType: 'autoUpdate',
-            injectRegister: 'auto',
+            injectRegister: 'script',
             manifest: {
                 name: 'QR Past',
                 short_name: 'QR Past',
