@@ -6,7 +6,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
     plugins: [
-        VitePWA(),
+        VitePWA({
+            registerType: 'autoUpdate',
+        }),
         laravel({
             input: 'resources/js/app.js',
             refresh: true,
