@@ -9,9 +9,9 @@
 
     <link rel="apple-touch-icon" href="{{ asset('icons/icon-192x192.png') }}" sizes="180x180">
     <meta name="theme-color" content="#32138D">
-    <link rel="manifest" href="{{ asset('build/manifest.webmanifest') }}">
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
 
-    <script src="{{ asset('build/registerSW.js') }}"></script>
+    <script src="{{ asset('registerSW.js') }}"></script>
 
 
     <!-- Fonts -->
