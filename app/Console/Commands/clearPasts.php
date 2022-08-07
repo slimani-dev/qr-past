@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Events\PastDeleted;
 use App\Models\Past;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class clearPasts extends Command
 {
@@ -27,9 +29,20 @@ class clearPasts extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
-        Past::where('created_at', '<', now()->subHours(1)->startOfHour())->delete();
+        $pasts = Past::where('created_at', '<', now()->subHours(1)->startOfHour())->get();
+
+        foreach ($pasts as $past) {
+            $mediaFiles = $past->getMedia('files');
+            foreach ($mediaFiles as /* @var $mediaFile Media */ $mediaFile) {
+                $past->delete($mediaFile->id);
+            }
+
+            event(new PastDeleted($past));
+            $past->delete();
+        }
+
         return 0;
     }
 }
