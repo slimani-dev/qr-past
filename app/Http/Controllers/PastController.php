@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Events\PastUpdated;
 use App\Models\Past;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\File;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\MediaCannotBeDeleted;
 
 class PastController extends Controller
 {
@@ -96,5 +101,44 @@ class PastController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Upload a file to the specified resource in storage.
+     *
+     * @param Request $request
+     * @param Past $past
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function file(Request $request, Past $past): \Illuminate\Http\RedirectResponse
+    {
+        $request->validate([
+            'file' => ['required', File::default()]
+        ]);
+
+        try {
+            $past->addMedia($request->file('file'))->toMediaCollection('files', 's3');
+        } catch (FileDoesNotExist|FileIsTooBig $e) {
+            \Log::error($e);
+        }
+
+        event(new PastUpdated($past));
+        return redirect()->route('pasts.show', $past);
+    }
+
+    /**
+     * Delete a file from the specified resource in storage.
+     *
+     * @param Past $past
+     * @param $id
+     * @return RedirectResponse
+     * @throws MediaCannotBeDeleted
+     */
+    public function deleteFile(Past $past, $id): \Illuminate\Http\RedirectResponse
+    {
+        $past->deleteMedia($id);
+
+        event(new PastUpdated($past));
+        return redirect()->route('pasts.show', $past);
     }
 }

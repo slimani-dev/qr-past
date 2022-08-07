@@ -1,27 +1,47 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import QRCodeVue3 from 'qrcode-vue3'
-import { Inertia } from '@inertiajs/inertia'
+import { useForm } from '@inertiajs/inertia-vue3'
+import PastFile from '@/Components/PastFile.vue'
 
 const props = defineProps({
     past: Object,
     url: String
 })
 
-const showQrCode = ref(false)
-const loading = ref(false)
-const form = reactive({
-    content: props.past.content
+const files = reactive({
+    data: props.past.files
 })
 
-const onSuccess = () => {
-    loading.value = false
-}
+const showQrCode = ref(false)
+const loading = ref(false)
+const uploadLoading = ref(false)
+
+const form = useForm({
+    content: props.past.content,
+    file: null
+})
 
 function submit () {
     loading.value = true
-    Inertia.put(`/pasts/${props.past.id}`, form, {
-        onSuccess
+    form.put(`/pasts/${props.past.id}`, {
+        onSuccess: () => {
+            loading.value = false
+        }
+    })
+}
+
+function uploadFile (e) {
+    form.file = e.target.files[0]
+    console.log('uploading file')
+    uploadLoading.value = true
+    form.post(`/pasts/${props.past.id}/file`, {
+        onSuccess: () => {
+            uploadLoading.value = false
+        },
+        onFinish: () => {
+            form.file = null
+        }
     })
 }
 
@@ -29,6 +49,7 @@ onMounted(() => {
     Echo.channel(`pasts.${props.past.id}`)
         .listen('.pasts.updated', (e) => {
             form.content = e.content
+            files.data = e.files
         })
 })
 </script>
@@ -36,18 +57,24 @@ onMounted(() => {
 <template>
     <div>
         <div class="h-screen bg-sky-100 flex md:space-x-6" :class="{'p-6': !showQrCode}">
-            <div class="flex grow flex-col h-full" :class="{'hidden': showQrCode }">
+            <div class="flex grow flex-col h-full space-y-4" :class="{'hidden': showQrCode }">
                 <div class="grow flex flex-col items-center justify-center">
                     <textarea
+                        @keyup.ctrl.enter="submit"
                         v-model="form.content"
-                        class="w-full h-full text-5xl flex justify-center items-center bg-transparent border-0 focus:border-0 focus:ring-0 outline-0 focus:outline-0"
+                        class="w-full h-full min-h-[300px] text-5xl flex justify-center items-center bg-transparent border-0 focus:border-0 focus:ring-0 outline-0 focus:outline-0"
                         placeholder="Put Your Text Here"></textarea>
                 </div>
-                <div class="shrink-0 space-x-4 flex flex-row">
+                <div v-if="files.data.length" class=" mx-2 text-sm font-bold">Max 4 files ( max size 10Mb )</div>
+                <div v-if="files.data.length"
+                     class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <PastFile v-for="file in files.data" :key="file.id" :file="file" :past_id="past.id"/>
+                </div>
+                <div class="shrink-0 grid grid-cols-5 md:grid-cols-2 gap-4">
                     <button
                         class="grow bg-blue-900 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
-                        active:bg-blue-700 disabled:bg-gray-400"
+                        active:bg-blue-700 disabled:bg-gray-400 col-span-2 md:col-span-1"
                         @click="submit"
                         :disabled="!form.content"
                     >
@@ -58,12 +85,24 @@ onMounted(() => {
                     <button
                         class="grow bg-blue-900 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
-                        active:bg-blue-700 disabled:bg-gray-400"
-                        disabled
+                        active:bg-blue-700 disabled:bg-gray-400 col-span-2 md:col-span-1"
+                        @click="$refs.file.click()"
                     >
-                        <span>Upload a file</span>
-                        <i class="ri-attachment-2"></i>
+                        <span>Upload</span>
+                        <i v-if="uploadLoading" class="ri-loader-5-fill animate-spin"></i>
+                        <i v-else class="ri-attachment-2"></i>
                     </button>
+                    <button
+                        @click="showQrCode = true"
+                        :class="{'hidden': showQrCode}"
+                        class="w-14 h-14 md:hidden text-white shadow-lg rounded-xl flex items-center justify-center bg-blue-900
+                        text-4xl">
+                        <i class="ri-qr-code-line"></i>
+                    </button>
+                    <input type="file"
+                           ref="file"
+                           class="hidden"
+                           @input="uploadFile">
                 </div>
             </div>
             <div
@@ -95,12 +134,6 @@ onMounted(() => {
                     href="https://witec.dev">WiTec</a>.
                 </div>
             </div>
-            <button
-                @click="showQrCode = true"
-                :class="{'hidden': showQrCode}"
-                class="w-14 h-14 md:hidden text-white shadow-lg rounded-xl flex items-center justify-center bg-blue-900
-                fixed bottom-24 right-6 text-4xl">
-                <i class="ri-qr-code-line"></i></button>
         </div>
     </div>
 </template>
