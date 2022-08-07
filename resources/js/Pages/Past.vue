@@ -25,7 +25,7 @@ setInterval(function () {
     if (timeLeft.milliseconds() >= 0) {
         countDown.value = `${timeLeft.hours()}h ${timeLeft.minutes()}m ${timeLeft.seconds()}s`
     } else {
-        countDown.value = 'soon'
+        countDown.value = 'a moment'
     }
 }, 1000)
 
