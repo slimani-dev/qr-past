@@ -34,6 +34,7 @@ const showQrCode = ref(false)
 const loading = ref(false)
 const uploadLoading = ref(false)
 const deleteLoading = ref(false)
+const uploadProgress = ref('0%')
 
 const form = useForm({
     content: props.past.content,
@@ -57,9 +58,13 @@ function uploadFile (e) {
         onSuccess: () => {
             uploadLoading.value = false
         },
+        onProgress: (p) => {
+            uploadProgress.value = (100 * p.loaded / p.total).toFixed(0) + '%'
+        },
         onFinish: () => {
             form.files = null
-            uploadLoading.value = null
+            uploadLoading.value = false
+            uploadProgress.value = '0%'
         }
     })
 }
@@ -122,7 +127,8 @@ onMounted(() => {
                         active:bg-blue-700 disabled:bg-gray-400 col-span-2 md:col-span-1"
                         @click="$refs.file.click()"
                     >
-                        <span>Upload</span>
+                        <span v-if="uploadLoading">{{ uploadProgress }}</span>
+                        <span v-else>Upload</span>
                         <i v-if="uploadLoading" class="ri-loader-5-fill animate-spin"></i>
                         <i v-else class="ri-attachment-2"></i>
                     </button>
