@@ -20,9 +20,10 @@ class PastController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): RedirectResponse
     {
         if ($request->has('id_to_delete')) {
             $past = Past::find($request->query('id_to_delete'));
