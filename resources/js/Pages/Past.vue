@@ -22,7 +22,11 @@ const createdAt = moment(props.past.created_at).add(1, 'hour').endOf('hour')
 setInterval(function () {
     const currentTime = moment()
     const timeLeft = moment.duration(createdAt.diff(currentTime))
-    countDown.value = `${timeLeft.hours()}h ${timeLeft.minutes()}m ${timeLeft.seconds()}s`
+    if (timeLeft.milliseconds() >= 0) {
+        countDown.value = `${timeLeft.hours()}h ${timeLeft.minutes()}m ${timeLeft.seconds()}s`
+    } else {
+        countDown.value = 'soon'
+    }
 }, 1000)
 
 
