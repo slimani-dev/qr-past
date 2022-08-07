@@ -16,7 +16,9 @@ const props = defineProps({
                     <h1 class=" text-4xl font-bold">Thank you for using QR & past</h1>
                 </div>
                 <div class="flex flex-row justify-center drop-shadow p-10 drop-shadow-lg">
-                    <img :src="image" class="w-96 h-96" alt="">
+                    <div class="w-96 h-96">
+                        <img :src="image" class="w-full h-full" alt="">
+                    </div>
                 </div>
                 <div class="shrink-0 grid p-4 gap-4">
                     <Link class="grow bg-blue-700 text-white p-4 rounded-xl

@@ -69,8 +69,7 @@ onMounted(() => {
             form.content = e.content
             files.data = e.files
         })
-        .listen('past.deleted', (e) => {
-            console.log(e)
+        .listen('.past.deleted', (e) => {
             window.location.href = route('thanks')
         })
 })
