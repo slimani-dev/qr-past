@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PastDeleted;
 use App\Events\PastUpdated;
 use App\Models\Past;
 use Illuminate\Http\RedirectResponse;
@@ -33,6 +34,7 @@ class PastController extends Controller
                 }
 
                 $past->delete();
+                event(new PastDeleted($past));
             }
         }
 
@@ -87,8 +89,10 @@ class PastController extends Controller
             $past->delete($mediaFile->id);
         }
 
+        event(new PastDeleted($past));
         $past->delete();
-        return redirect()->route('thank-you');
+
+        return redirect()->route('thanks');
     }
 
     /**

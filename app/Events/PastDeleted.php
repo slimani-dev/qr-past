@@ -11,7 +11,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class PastUpdated implements ShouldBroadcast
+class PastDeleted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -45,7 +45,7 @@ class PastUpdated implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'past.updated';
+        return 'past.deleted';
     }
 
     /**

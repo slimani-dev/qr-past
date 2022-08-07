@@ -11,7 +11,7 @@ const props = defineProps({
     <div>
         <div class="h-screen bg-sky-100 flex md:items-center md:justify-center md:space-x-6 md:p-6">
             <div
-                class="bg-blue-900 duration-200 rounded-xl flex flex-col md:h-min h-full w-full md:w-[450px] shrink-0">
+                class="bg-blue-900 duration-200 md:rounded-xl flex flex-col md:h-min h-full w-full md:w-[450px] shrink-0">
                 <div class="grow text-center text-white p-10">
                     <h1 class=" text-4xl font-bold">Thank you for using QR & past</h1>
                 </div>

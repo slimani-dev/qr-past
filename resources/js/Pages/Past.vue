@@ -65,9 +65,13 @@ function deletePast () {
 
 onMounted(() => {
     Echo.channel(`pasts.${props.past.id}`)
-        .listen('.pasts.updated', (e) => {
+        .listen('.past.updated', (e) => {
             form.content = e.content
             files.data = e.files
+        })
+        .listen('past.deleted', (e) => {
+            console.log(e)
+            window.location.href = route('thanks')
         })
 })
 </script>
@@ -124,7 +128,7 @@ onMounted(() => {
                 </div>
             </div>
             <div
-                class="bg-blue-900 duration-200 rounded-xl flex flex-col h-full w-full md:w-[450px] shrink-0"
+                class="bg-blue-900 duration-200 md:rounded-xl flex flex-col h-full w-full md:w-[450px] shrink-0"
                 :class="{'hidden md:flex ': !showQrCode }">
                 <div class="flex justify-end">
                     <button
@@ -163,7 +167,7 @@ onMounted(() => {
                     </Link>
                     <button class="grow h-14 bg-blue-700 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
-                        active:bg-blue-700 disabled:bg-gray-400 col-span-2 md:col-span-1"
+                        active:bg-blue-700 disabled:bg-gray-400"
                             @click="deletePast">
                         <i v-if="deleteLoading" class="ri-loader-5-fill animate-spin"></i>
                         <i v-else class="ri-delete-bin-line"></i>
