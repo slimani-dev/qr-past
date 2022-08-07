@@ -122,9 +122,10 @@ onMounted(() => {
                         <i v-else class="ri-send-plane-2-line"></i>
                     </button>
                     <button
+                        :disabled="uploadLoading"
                         class="grow h-14 bg-blue-900 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
-                        active:bg-blue-700 disabled:bg-gray-400 col-span-2 md:col-span-1"
+                        active:bg-blue-700 col-span-2 md:col-span-1"
                         @click="$refs.file.click()"
                     >
                         <span v-if="uploadLoading">{{ uploadProgress }}</span>
