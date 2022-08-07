@@ -129,8 +129,9 @@ onMounted(() => {
                 </div>
                 <div class="text-white p-8 lg:p-12 grow"><h3 class="text-3xl font-bold text-center mb-4">QR past</h3>
                     <p>scan the QR code and past the text between your devices.</p><br>
-                    <p> your data will be removed in 24h </p></div>
-                    <p>Max 4 files ( max size 10Mb )</p></div>
+                    <p> your data will be removed in 24h </p> <br>
+                    <p>Max 4 files ( max size 10Mb )</p>
+                </div>
                 <div class="md:hidden mb-6 shrink-0 text-gray-300 text-center"> Copyright © 2022 <a
                     href="https://witec.dev">WiTec</a>.
                 </div>
