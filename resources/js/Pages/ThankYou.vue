@@ -16,7 +16,7 @@ const props = defineProps({
                     <h1 class=" text-4xl font-bold">Thank you for using QR & past</h1>
                 </div>
                 <div class="flex flex-row justify-center drop-shadow p-10 drop-shadow-lg">
-                    <div class="w-96 h-96">
+                    <div class="aspect-1">
                         <img :src="image" class="w-full h-full" alt="">
                     </div>
                 </div>
