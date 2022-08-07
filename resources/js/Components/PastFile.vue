@@ -27,7 +27,7 @@ function deleteMedia () {
     <div class="flex flex-row items-center pl-4 py-4 bg-blue-900 h-14 rounded-xl text-white">
         <div class="grow w-[calc(100%-112px)] mr-2">
             <p class="line-clamp-1 mb-0">{{ file.name }}</p>
-            <p class="line-clamp-1 text-xs text-blue-500">{{ file.type }}</p>
+            <p class="line-clamp-1 text-xs text-blue-300 uppercase">{{ file.type }}</p>
         </div>
         <a :href="file.url" target="_blank" :download="file.name"
            class="active:bg-blue-800 hover:bg-blue-800 p-4 h-14">
