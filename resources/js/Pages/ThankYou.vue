@@ -25,8 +25,8 @@ const props = defineProps({
                         flex flex-row space-x-1 items-center justify-center
                         active:bg-blue-700 disabled:bg-gray-400 col-span-2 md:col-span-1"
                           :href="route('pasts.index')">
-                        <span>start new QR Past</span>
-                        <i class="ri-add-circle-fill"></i>
+                        <span>Start new QR Past</span>
+                        <i class="ri-qr-code-line"></i>
                     </Link>
                 </div>
                 <div class="mb-6 shrink-0 text-gray-300 text-center"> Copyright © 2022 <a
