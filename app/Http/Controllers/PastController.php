@@ -12,6 +12,7 @@ use Inertia\Response;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\MediaCannotBeDeleted;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class PastController extends Controller
 {
@@ -20,32 +21,24 @@ class PastController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('id_to_delete')) {
+            $past = Past::find($request->query('id_to_delete'));
+
+            if ($past) {
+                $mediaFiles = $past->getMedia('files');
+                foreach ($mediaFiles as /* @var $mediaFile Media */ $mediaFile) {
+                    $past->delete($mediaFile->id);
+                }
+
+                $past->delete();
+            }
+        }
+
         $past = Past::create();
 
         return redirect()->route('pasts.show', $past);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -58,17 +51,6 @@ class PastController extends Controller
     {
         $url = route('pasts.show', $past);
         return Inertia::render('Past', compact('past', 'url'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -95,12 +77,29 @@ class PastController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Past $past
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Past $past): RedirectResponse
     {
-        //
+        $mediaFiles = $past->getMedia('files');
+        foreach ($mediaFiles as /* @var $mediaFile Media */ $mediaFile) {
+            $past->delete($mediaFile->id);
+        }
+
+        $past->delete();
+        return redirect()->route('thank-you');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return Response
+     */
+    public function thanks(): Response
+    {
+        $image = asset('logo.png');
+        return Inertia::render('ThankYou', compact('image'));
     }
 
     /**

@@ -20,6 +20,7 @@ Route::get('/', [PastController::class, 'index'])->name('welcome');
 Route::resource('/pasts', PastController::class);
 Route::post('/pasts/{past}/file', [PastController::class, 'file']);
 Route::delete('/pasts/{past}/file/{id}', [PastController::class, 'deleteFile']);
+Route::get('/thanks', [PastController::class, 'thanks'])->name('thank-you');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
