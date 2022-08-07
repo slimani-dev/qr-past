@@ -9,7 +9,8 @@ import { Inertia } from '@inertiajs/inertia'
 
 const props = defineProps({
     past: Object,
-    url: String
+    url: String,
+    errors: Object
 })
 
 const files = reactive({
@@ -32,7 +33,7 @@ const deleteLoading = ref(false)
 
 const form = useForm({
     content: props.past.content,
-    file: null
+    files: null
 })
 
 function submit () {
@@ -45,15 +46,16 @@ function submit () {
 }
 
 function uploadFile (e) {
-    form.file = e.target.files[0]
+    form.files = e.target.files
     console.log('uploading file')
     uploadLoading.value = true
-    form.post(`/pasts/${props.past.id}/file`, {
+    form.post(`/pasts/${props.past.id}/files`, {
         onSuccess: () => {
             uploadLoading.value = false
         },
         onFinish: () => {
-            form.file = null
+            form.files = null
+            uploadLoading.value = null
         }
     })
 }
@@ -86,7 +88,14 @@ onMounted(() => {
                         class="w-full h-full min-h-[300px] text-5xl flex justify-center items-center bg-transparent border-0 focus:border-0 focus:ring-0 outline-0 focus:outline-0"
                         placeholder="Put Your Text Here"></textarea>
                 </div>
-                <div v-if="files.data.length" class=" mx-2 text-sm font-bold">Max 4 files ( max size 10Mb )</div>
+                <div v-if="Object.values(errors).length">
+                    <div v-for="error in Object.values(errors)"
+                         :key="error"
+                         class=" mx-2 text-sm font-bold">
+                        {{ error }}
+                    </div>
+                </div>
+
                 <div v-if="files.data.length"
                      class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <PastFile v-for="file in files.data" :key="file.id" :file="file" :past_id="past.id"/>
@@ -122,6 +131,7 @@ onMounted(() => {
                     </button>
                     <input type="file"
                            ref="file"
+                           multiple
                            class="hidden"
                            @input="uploadFile">
                 </div>

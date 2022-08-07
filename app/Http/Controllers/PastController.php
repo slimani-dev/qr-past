@@ -113,14 +113,24 @@ class PastController extends Controller
      * @param Past $past
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function file(Request $request, Past $past): \Illuminate\Http\RedirectResponse
+    public function files(Request $request, Past $past): \Illuminate\Http\RedirectResponse
     {
+        $mediaCount = $past->getMedia('files')->count();
+        $filesRule = $mediaCount >= 4 ? 'prohibited' : 'max:' . (4 - $mediaCount);
+
         $request->validate([
-            'file' => ['required', File::default()]
+            'files' => $filesRule,
+            'files.*' => ['required', 'max:10000', 'file']
+        ], [
+            'files.*.max' => 'max size is 10Mb',
+            'files.max' => 'max number of files is 4',
+            'files.prohibited' => 'max number of files is 4'
         ]);
 
         try {
-            $past->addMedia($request->file('file'))->toMediaCollection('files', 's3');
+            foreach ($request->file('files') as $file) {
+                $past->addMedia($file)->toMediaCollection('files', 's3');
+            }
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             \Log::error($e);
         }
