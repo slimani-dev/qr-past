@@ -182,8 +182,8 @@ onMounted(() => {
                         flex flex-row space-x-1 items-center justify-center
                         active:bg-blue-700 disabled:bg-gray-400"
                           :href="route('pasts.index', {'id_to_delete': past.id})">
-                        <span>start new QR Past</span>
-                        <i class="ri-add-circle-line text-lg ml-1"></i>
+                        <span>Start new QR Past</span>
+                        <i class="ri-qr-code-line"></i>
                     </Link>
                     <button class="grow h-14 bg-blue-700 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
