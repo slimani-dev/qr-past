@@ -59,6 +59,10 @@ class PastController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (Past::count() > 50) {
+            return redirect()->route('sorry');
+        }
+
         $request->validate([
             'code' => 'nullable|string'
         ]);
@@ -145,6 +149,17 @@ class PastController extends Controller
     {
         $image = asset('logo.png');
         return Inertia::render('ThankYou', compact('image'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return Response
+     */
+    public function sorry(): Response
+    {
+        $image = asset('logo.png');
+        return Inertia::render('Sorry', compact('image'));
     }
 
     /**

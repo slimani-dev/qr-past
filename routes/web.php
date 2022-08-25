@@ -23,6 +23,7 @@ Route::resource('/pasts', PastController::class);
 Route::post('/pasts/{past}/files', [PastController::class, 'files']);
 Route::delete('/pasts/{past}/file/{id}', [PastController::class, 'deleteFile']);
 Route::get('/thanks', [PastController::class, 'thanks'])->name('thanks');
+Route::get('/sorry', [PastController::class, 'sorry'])->name('sorry');
 
 Route::inertia('/privacy_policy', 'PrivacyPolicy')->name('privacy_policy');
 Route::inertia('/Terms_and_Conditions', 'TermsAndConditions')->name('Terms_and_Conditions');
