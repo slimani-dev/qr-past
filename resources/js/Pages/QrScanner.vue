@@ -20,7 +20,7 @@ const reset = () => {
 
 const onDecode = (decodedString) => {
     console.log(decodedString)
-    if (decodedString.match(/^(https:\/\/qr-past\.witec\.net\/c\/)[a-zA-Z0-9]+/)) {
+    if (decodedString.match(/^(https:\/\/qr-past\.witec\.dev\/c\/)[a-zA-Z0-9]+/)) {
         const url = new URL(decodedString)
         pathname.value = url.pathname
         console.log(url)
