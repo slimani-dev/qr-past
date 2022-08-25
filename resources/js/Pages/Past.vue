@@ -142,7 +142,7 @@ function dragLeave (e) {
                     <button
                         class="grow h-14 bg-blue-800 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center shadow-lg
-                        active:bg-blue-600 disabled:text-opacity-60 col-span-2 md:col-span-1"
+                        active:bg-blue-600 md:disabled:text-opacity-60 col-span-2 md:col-span-1"
                         @click="submit"
                         :disabled="!form.content"
                     >
