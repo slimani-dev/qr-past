@@ -40,6 +40,7 @@ function newPast () {
                         class="flex flex-col space-y-4 p-4 text-center">
                         <p class="text-center text-white font-semibold">Enter a Code here</p>
                         <input v-model="form.code"
+                               required
                                class="bg-blue-200 text-white p-4 rounded-xl
                                 flex flex-row space-x-1 items-center justify-center
                                 text-blue-800 placeholder-gray-400 font-bold text-center uppercase
@@ -49,7 +50,7 @@ function newPast () {
                             <div class="flex flex-row space-x-4">
                                 <button class="grow bg-blue-600 text-white p-4 rounded-xl
                                     flex flex-row space-x-1 items-center justify-center
-                                    active:bg-blue-700 disabled:bg-blue-700 disabled:text-blue-400 col-span-2 md:col-span-1"
+                                    active:bg-blue-700 md:disabled:bg-blue-700 md:disabled:text-blue-400 col-span-2 md:col-span-1"
                                         :disabled="!form.code"
                                         type="submit">
                                     <span>Start new QR Past</span>
