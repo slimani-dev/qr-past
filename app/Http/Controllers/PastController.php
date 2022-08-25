@@ -18,29 +18,63 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class PastController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a Welcome page.
+     *
+     * @return Response
+     */
+    public function index(): Response
+    {
+        $image = asset('logo.png');
+        return Inertia::render('Welcome', compact('image'));
+    }
+
+    /**
+     * Display a Qr scanner page.
+     *
+     * @return Response
+     */
+    public function scan(): Response
+    {
+        $qr_scan_bg = asset('img/qr_scan_bg.svg');
+        return Inertia::render('QrScanner', compact('qr_scan_bg'));
+    }
+
+    /**
+     * find resource using the code.
+     *
+     * @param $code
+     * @return RedirectResponse
+     */
+    public function code($code): RedirectResponse
+    {
+        $past = Past::where('code', $code)->first();
+        return redirect()->route('pasts.show', $past);
+    }
+
+    /**
+     * Store the specified resource in storage.
      *
      * @param Request $request
      * @return RedirectResponse
      */
-    public function index(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        if ($request->has('id_to_delete')) {
-            $past = Past::find($request->query('id_to_delete'));
+        $request->validate([
+            'code' => 'nullable|string'
+        ]);
 
-            if ($past) {
-                $mediaFiles = $past->getMedia('files');
-                foreach ($mediaFiles as /* @var $mediaFile Media */ $mediaFile) {
-                    $past->delete($mediaFile->id);
-                }
-
-                $past->delete();
-                event(new PastDeleted($past));
-            }
+        $code = $request->get('code');
+        while (Past::where('code', $code)->exists()) {
+            $code .= \Str::random(1);
         }
 
-        $past = Past::create();
+        $past = Past::create([
+            'code' => $code
+        ]);
 
+        $past->save();
+
+        event(new PastUpdated($past));
         return redirect()->route('pasts.show', $past);
     }
 
@@ -52,7 +86,7 @@ class PastController extends Controller
      */
     public function show(Past $past): Response
     {
-        $url = route('pasts.show', $past);
+        $url = route('code', $past->code);
         return Inertia::render('Past', compact('past', 'url'));
     }
 
@@ -80,10 +114,12 @@ class PastController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     *
+     * @param Request $request
      * @param Past $past
      * @return RedirectResponse
      */
-    public function destroy(Past $past): RedirectResponse
+    public function destroy(Past $past, Request $request): RedirectResponse
     {
         $mediaFiles = $past->getMedia('files');
         foreach ($mediaFiles as /* @var $mediaFile Media */ $mediaFile) {
@@ -92,6 +128,10 @@ class PastController extends Controller
 
         event(new PastDeleted($past));
         $past->delete();
+
+        if ($request->has('new')) {
+            return redirect()->route('welcome');
+        }
 
         return redirect()->route('thanks');
     }

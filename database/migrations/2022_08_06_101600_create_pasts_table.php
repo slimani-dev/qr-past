@@ -13,7 +13,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('pasts', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id('id');
+            $table->string('code')->nullable()->unique();
             $table->text('content')->nullable();
             $table->timestamps();
         });

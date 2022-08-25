@@ -50,8 +50,7 @@ function submit () {
     })
 }
 
-function uploadFile (e) {
-    form.files = e.target.files
+function fileUploader () {
     console.log('uploading file')
     uploadLoading.value = true
     form.post(`/pasts/${props.past.id}/files`, {
@@ -69,6 +68,17 @@ function uploadFile (e) {
     })
 }
 
+function uploadFile (e) {
+    form.files = e.target.files
+    fileUploader()
+}
+
+function onDrop (e) {
+    form.files = e.dataTransfer.files
+    drag_over.value = false
+    fileUploader()
+}
+
 function deletePast () {
     deleteLoading.value = true
     Inertia.delete(`/pasts/${props.past.id}`)
@@ -84,6 +94,17 @@ onMounted(() => {
             window.location.href = route('thanks')
         })
 })
+
+
+const drag_over = ref(false)
+
+function dragEnter (e) {
+    drag_over.value = true
+}
+
+function dragLeave (e) {
+    drag_over.value = false
+}
 </script>
 
 <template>
@@ -92,9 +113,17 @@ onMounted(() => {
             <div class="flex grow flex-col h-full space-y-4" :class="{'hidden': showQrCode }">
                 <div class="grow flex flex-col items-center justify-center">
                     <textarea
+                        @dragenter="dragEnter"
+                        @dragleave="dragLeave"
+                        @dragover.prevent
+                        @drop.prevent="onDrop"
                         @keyup.ctrl.enter="submit"
                         v-model="form.content"
-                        class="w-full h-full min-h-[300px] text-5xl flex justify-center items-center bg-transparent border-0 focus:border-0 focus:ring-0 outline-0 focus:outline-0"
+                        :class="{
+                         'text-gray-300 placeholder-transparent border-2 border-dashed border-gray-400 rounded-xl': drag_over
+                        }"
+                        class="w-full h-full min-h-[300px] text-5xl flex justify-center items-center bg-transparent
+                        border-0 focus:border-0 focus:ring-0 outline-0 focus:outline-0"
                         placeholder="Put Your Text Here"></textarea>
                 </div>
                 <div v-if="Object.values(errors).length">
@@ -111,9 +140,9 @@ onMounted(() => {
                 </div>
                 <div class="shrink-0 grid grid-cols-5 md:grid-cols-2 gap-4">
                     <button
-                        class="grow h-14 bg-blue-900 text-white p-4 rounded-xl
-                        flex flex-row space-x-1 items-center justify-center
-                        active:bg-blue-700 disabled:bg-gray-400 col-span-2 md:col-span-1"
+                        class="grow h-14 bg-blue-800 text-white p-4 rounded-xl
+                        flex flex-row space-x-1 items-center justify-center shadow-lg
+                        active:bg-blue-600 disabled:text-opacity-60 col-span-2 md:col-span-1"
                         @click="submit"
                         :disabled="!form.content"
                     >
@@ -123,9 +152,9 @@ onMounted(() => {
                     </button>
                     <button
                         :disabled="uploadLoading"
-                        class="grow h-14 bg-blue-900 text-white p-4 rounded-xl
+                        class="grow h-14 bg-blue-800 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
-                        active:bg-blue-700 col-span-2 md:col-span-1"
+                        active:bg-blue-600 col-span-2 md:col-span-1 shadow-lg"
                         @click="$refs.file.click()"
                     >
                         <span v-if="uploadLoading">{{ uploadProgress }}</span>
@@ -136,7 +165,7 @@ onMounted(() => {
                     <button
                         @click="showQrCode = true"
                         :class="{'hidden': showQrCode}"
-                        class="w-14 h-14 md:hidden text-white shadow-lg rounded-xl flex items-center justify-center bg-blue-900
+                        class="w-14 h-14 md:hidden text-white shadow-lg rounded-xl flex items-center justify-center bg-blue-800
                         text-4xl">
                         <i class="ri-qr-code-line"></i>
                     </button>
@@ -148,12 +177,12 @@ onMounted(() => {
                 </div>
             </div>
             <div
-                class="bg-blue-900 duration-200 md:rounded-xl flex flex-col h-full w-full md:w-[450px] shrink-0"
+                class="bg-blue-800 duration-200 md:rounded-xl flex flex-col h-full w-full md:w-[450px] shrink-0 shadow-lg"
                 :class="{'hidden md:flex ': !showQrCode }">
                 <div class="flex justify-end">
                     <button
                         @click="showQrCode = false"
-                        class="w-16 md:invisible h-16 text-white rounded-full flex items-center justify-center bg-blue-900 text-3xl">
+                        class="w-16 md:invisible h-16 text-white rounded-full flex items-center justify-center bg-blue-800 text-3xl">
                         <i class="ri-close-line"></i></button>
                 </div>
                 <div class="pt-1  flex justify-center items-center">
@@ -178,22 +207,23 @@ onMounted(() => {
                     </ul>
                 </div>
                 <div class="shrink-0 grid grid-cols-5 p-4 gap-4">
-                    <Link class="bg-blue-700 h-14 col-span-4 text-white p-4 rounded-xl
+                    <Link class="bg-blue-600 h-14 col-span-4 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
-                        active:bg-blue-700 disabled:bg-gray-400"
+                        active:bg-blue-600 disabled:bg-gray-400"
                           :href="route('pasts.index', {'id_to_delete': past.id})">
                         <span>Start new QR Past</span>
                         <i class="ri-qr-code-line"></i>
                     </Link>
-                    <button class="grow h-14 bg-blue-700 text-white p-4 rounded-xl
+                    <button class="grow h-14 bg-blue-600 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
-                        active:bg-blue-700 disabled:bg-gray-400"
+                        active:bg-blue-600"
+                            :disabled="deleteLoading"
                             @click="deletePast">
                         <i v-if="deleteLoading" class="ri-loader-5-fill animate-spin"></i>
                         <i v-else class="ri-delete-bin-line"></i>
                     </button>
                 </div>
-                <div class="mb-6 shrink-0 text-gray-300 text-center"> Copyright © 2022 <a
+                <div class="mb-6 shrink-0 text->gray-300 text-center"> Copyright © 2022 <a
                     href="https://witec.dev">WiTec</a>.
                 </div>
             </div>

@@ -5,7 +5,6 @@ import { Inertia } from '@inertiajs/inertia'
 
 const props = defineProps({
     past_id: {
-        type: String,
         required: true
     },
     file: {
@@ -24,7 +23,7 @@ function deleteMedia () {
 </script>
 
 <template>
-    <div class="flex flex-row items-center pl-4 py-4 bg-blue-900 h-14 rounded-xl text-white">
+    <div class="flex flex-row items-center pl-4 py-4 bg-blue-800 h-14 rounded-xl text-white shadow-lg">
         <div class="grow w-[calc(100%-112px)] mr-2">
             <p class="line-clamp-1 mb-0">{{ file.name }}</p>
             <p class="line-clamp-1 text-xs text-blue-300 uppercase">{{ file.type }}</p>

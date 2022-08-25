@@ -17,6 +17,8 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [PastController::class, 'index'])->name('welcome');
+Route::get('/c/{code}', [PastController::class, 'code'])->name('code');
+Route::get('/scan', [PastController::class, 'scan'])->name('scan');
 Route::resource('/pasts', PastController::class);
 Route::post('/pasts/{past}/files', [PastController::class, 'files']);
 Route::delete('/pasts/{past}/file/{id}', [PastController::class, 'deleteFile']);
