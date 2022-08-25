@@ -24,8 +24,14 @@ Route::post('/pasts/{past}/files', [PastController::class, 'files']);
 Route::delete('/pasts/{past}/file/{id}', [PastController::class, 'deleteFile']);
 Route::get('/thanks', [PastController::class, 'thanks'])->name('thanks');
 
+Route::inertia('/privacy_policy', 'PrivacyPolicy')->name('privacy_policy');
+Route::inertia('/Terms_and_Conditions', 'TermsAndConditions')->name('Terms_and_Conditions');
+
+
+/*
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
+*/

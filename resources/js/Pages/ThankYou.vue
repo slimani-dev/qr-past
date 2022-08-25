@@ -27,8 +27,14 @@ const props = defineProps({
                         <i class="ri-qr-code-line"></i>
                     </Link>
                 </div>
-                <div class="mb-6 shrink-0 text-gray-300 text-center"> Copyright © 2022 <a
-                    href="https://witec.dev">WiTec</a>.
+                <div class="shrink-0 mb-1 text-gray-300 text-center">
+                    Copyright © 2022 <a class="font-bold" href="https://witec.dev">WiTec</a>.
+                </div>
+                <div class="shrink-0 mb-6 text-xs text-gray-300 text-center">
+                    <Link class="underline" :href="route('privacy_policy')">Privacy Policy</Link>
+                    . /
+                    <Link class="underline" :href="route('Terms_and_Conditions')">Terms &amp; Conditions</Link>
+                    .
                 </div>
             </div>
         </div>
