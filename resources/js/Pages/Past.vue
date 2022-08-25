@@ -223,7 +223,7 @@ function dragLeave (e) {
                         <i v-else class="ri-delete-bin-line"></i>
                     </button>
                 </div>
-                <div class="mb-6 shrink-0 text->gray-300 text-center"> Copyright © 2022 <a
+                <div class="mb-6 shrink-0 text-gray-300 text-center"> Copyright © 2022 <a
                     href="https://witec.dev">WiTec</a>.
                 </div>
             </div>
