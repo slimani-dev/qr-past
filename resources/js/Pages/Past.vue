@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import QRCodeVue3 from 'qrcode-vue3'
-import { useForm } from '@inertiajs/inertia-vue3'
+import { Link, useForm } from '@inertiajs/inertia-vue3'
 import PastFile from '@/Components/PastFile.vue'
 import moment from 'moment'
-import { Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
+import CopyUrl from '@/Components/CopyUrl.vue'
+
 
 const props = defineProps({
     past: Object,
@@ -185,7 +186,7 @@ function dragLeave (e) {
                         class="w-16 md:invisible h-16 text-white rounded-full flex items-center justify-center bg-blue-800 text-3xl">
                         <i class="ri-close-line"></i></button>
                 </div>
-                <div class="pt-1  flex justify-center items-center">
+                <div class="pt-1 flex justify-center items-center">
                     <QRCodeVue3
                         :height="300"
                         :width="300"
@@ -207,6 +208,12 @@ function dragLeave (e) {
                     </ul>
                 </div>
                 <div class="shrink-0 grid grid-cols-5 p-4 gap-4">
+                    <div class="bg-blue-600 h-14 col-span-4 text-blue-200 p-4 rounded-xl
+                        flex flex-row space-x-1 items-center justify-center
+                        active:bg-blue-600 disabled:bg-gray-400">
+                        <span>Code: <span class="text-white font-bold">{{ past.code }}</span></span>
+                    </div>
+                    <copy-url :url="url"/>
                     <Link class="bg-blue-600 h-14 col-span-4 text-white p-4 rounded-xl
                         flex flex-row space-x-1 items-center justify-center
                         active:bg-blue-600 disabled:bg-gray-400"
@@ -227,8 +234,10 @@ function dragLeave (e) {
                                                                                           href="https://witec.dev">WiTec</a>.
                 </div>
                 <div class="shrink-0 mb-4 text-xs text-gray-300 text-center">
-                    <Link class="underline" :href="route('privacy_policy')">Privacy Policy</Link>. /
-                    <Link class="underline" :href="route('Terms_and_Conditions')">Terms &amp; Conditions</Link>.
+                    <Link class="underline" :href="route('privacy_policy')">Privacy Policy</Link>
+                    . /
+                    <Link class="underline" :href="route('Terms_and_Conditions')">Terms &amp; Conditions</Link>
+                    .
                 </div>
             </div>
         </div>

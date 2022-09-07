@@ -68,15 +68,12 @@ class PastController extends Controller
         ]);
 
         $code = $request->get('code');
-        while (Past::where('code', $code)->exists()) {
-            $code .= \Str::random(1);
-        }
 
-        $past = Past::create([
+        $past = Past::updateOrCreate([
+            'code' => $code
+        ], [
             'code' => $code
         ]);
-
-        $past->save();
 
         event(new PastUpdated($past));
         return redirect()->route('pasts.show', $past);
