@@ -37,6 +37,11 @@ class Past extends Model implements HasMedia
 
     protected $appends = ['files'];
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('files');
+    }
+
     public function files(): Attribute
     {
         return Attribute::get(function () {
